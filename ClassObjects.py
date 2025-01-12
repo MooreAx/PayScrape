@@ -1,7 +1,6 @@
 #create class objects for a pairing
 
 class Flight:
-	#for deadheads & flights (for now)
 	def __init__(self, flight_number, origin, destination, departure_time, arrival_time):
 		self.flight_number = flight_number
 		self.origin = origin
@@ -13,12 +12,26 @@ class Flight:
 	def __repr__(self):
 		return(f"Flight({self.flight_number}, {self.origin}, {self.destination}, {self.departure_time}, {self.arrival_time})")
 
+
+class Deadhead:
+	def __init__(self, flight_number, origin, destination, departure_time, arrival_time):
+		self.flight_number = flight_number
+		self.origin = origin
+		self.destination = destination
+		self.departure_time = departure_time
+		self.arrival_time = arrival_time
+
+	# returns a printable representation of the object
+	def __repr__(self):
+		return(f"Deadhead({self.flight_number}, {self.origin}, {self.destination}, {self.departure_time}, {self.arrival_time})")
+
+
 class DutyPeriod:
 	def __init__(self, start_time, end_time):
 		self.start_time = start_time
 		self.end_time = end_time
 		self.flights = [] #list to store flight objects
-		self.deadheads = []
+		self.deadheads = [] #list to store deadhead objects
 
 	def add_flight(self, flight):
 		if isinstance(flight, Flight):
@@ -34,7 +47,7 @@ class DutyPeriod:
 
 	def add_deadhead(self, deadhead):
 		if isinstance(deadhead, Deadhead):
-			self.deadheads.append(flight)
+			self.deadheads.append(deadhead)
 		else:
 			raise TypeError("Only Flight objects can be added to a DutyPeriod")
 
@@ -53,12 +66,7 @@ class Pairing:
 		self.dutyperiods = [] #list to store duty period objects
 		self.restperiods = []
 		
-
 	def set_attribute(self, captain = None, fo = None, fa1 = None, fa2 = None, observer = None):
-		if pairing_start_time:
-			self.start_time = start_time
-		if end_time:
-			self.end_time = end_time
 		if captain:
 			self.captain = captain
 		if fo:

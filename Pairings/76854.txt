@@ -1,4 +1,4 @@
-PAIRING ID: 76854 FOR: 5788 - MOORE, A GENERATED: 12-Jan-25 05:06 UTC
+PAIRING ID: 76854 FOR: 5788 - MOORE, A GENERATED: 11-Jan-25 23:39 UTC
 CHECK-IN/START: 18-Dec-24 15:00 LCL FINISHED: 21-Dec-24 19:34 LCL
 # Type Orig Dest Flt Out/Start [LCL] In/End [LCL] Details Hrs Mileage
 [CA] Troy Sciberras, [FO] Alex Moore, [FA] Jonathan Ollinik
