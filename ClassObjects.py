@@ -32,24 +32,25 @@ class DutyPeriod:
 		self.end_time = end_time
 		self.flights = [] #list to store flight objects
 		self.deadheads = [] #list to store deadhead objects
+		self.rests = []
 
 	def add_flight(self, flight):
 		if isinstance(flight, Flight):
 			self.flights.append(flight)
 		else:
-			raise TypeError("Only Flight objects can be added to a DutyPeriod")
-
-	def add_deadhead(self, deadhead):
-		if isinstance(deadhead, Flight):
-			self.deadheads.append(deadhead)
-		else:
-			raise TypeError("Only Flight objects (including deadheads) can be added to a DutyPeriod")
+			raise TypeError("expected Flight object")
 
 	def add_deadhead(self, deadhead):
 		if isinstance(deadhead, Deadhead):
 			self.deadheads.append(deadhead)
 		else:
-			raise TypeError("Only Flight objects can be added to a DutyPeriod")
+			raise TypeError("expected Deadhead object")
+
+	def add_rest(self, rest):
+		if isinstance(rest, Rest):
+			self.rests.append(rest)
+		else:
+			raise TypeError("expected Rest object")
 
 	# returns a printable representation of the object
 	def __repr__(self):
@@ -66,18 +67,6 @@ class Pairing:
 		self.dutyperiods = [] #list to store duty period objects
 		self.restperiods = []
 		
-	def set_attribute(self, captain = None, fo = None, fa1 = None, fa2 = None, observer = None):
-		if captain:
-			self.captain = captain
-		if fo:
-			self.fo = fo
-		if fa1:
-			self.fa1 = fa1
-		if fa2:
-			self.fa2 = fa2
-		if observer:
-			self.observer = observer
-
 	def add_dutyperiod(self, dutyperiod):
 		self.dutyperiods.append(dutyperiod)
 

@@ -4,6 +4,7 @@ Reads scraped data into class instances
 
 import LineProcessor as LP
 import ClassObjects as CO
+import DateTimeCalcs as DT
 
 PID = "76854"
 
@@ -12,6 +13,9 @@ with open(f'Pairings/{PID}.txt', 'r') as file:
     s = file.read()
 
 lines = s.splitlines()
+
+#all pairings start & end at pilot's base
+pilotbase = "CYWG"
 
 #create empty lists for storing objects
 Pairings = []
@@ -26,8 +30,8 @@ p_dict = LP.process_Pairing(lines[1])
 crew = LP.process_Crew(lines[3])
 pairing = CO.Pairing(
     pid = h_dict["PID"],
-    start_time = p_dict["StartTime"],
-    end_time = p_dict["EndTime"],
+    start_time = DT.lcl_string_to_utc_datetime(p_dict["StartTime"], pilotbase),
+    end_time = DT.lcl_string_to_utc_datetime(p_dict["EndTime"], pilotbase),
     crew = crew
     )
 Pairings.append(pairing)
@@ -39,8 +43,8 @@ for line in lines[4:]:
         case "Duty":
             dp_dict = LP.process_DutyPeriod(line)
             dutyperiod = CO.DutyPeriod(
-                start_time = dp_dict["Start"],
-                end_time = dp_dict["End"])
+                start_time = DT.utc_string_to_utc_datetime(dp_dict["Start"]),
+                end_time = DT.utc_string_to_utc_datetime(dp_dict["End"]))
             DutyPeriods.append(dutyperiod)
             print(dutyperiod)
 
@@ -50,8 +54,8 @@ for line in lines[4:]:
                 flight_number = dh_dict["FlightNumber"],
                 origin = dh_dict["Origin"],
                 destination = dh_dict["Destination"],
-                departure_time = dh_dict["OutTime"],
-                arrival_time = dh_dict["InTime"])
+                departure_time = DT.lcl_string_to_utc_datetime(dh_dict["OutTime"], dh_dict["Origin"]),
+                arrival_time = DT.lcl_string_to_utc_datetime(dh_dict["InTime"], dh_dict["Destination"]))
             Deadheads.append(deadhead)
             print(deadhead)
 
@@ -61,8 +65,8 @@ for line in lines[4:]:
                 flight_number = f_dict["FlightNumber"],
                 origin = f_dict["Origin"],
                 destination = f_dict["Destination"],
-                departure_time = f_dict["OutTime"],
-                arrival_time = f_dict["InTime"])
+                departure_time = DT.lcl_string_to_utc_datetime(f_dict["OutTime"], f_dict["Origin"]),
+                arrival_time = DT.lcl_string_to_utc_datetime(f_dict["InTime"], f_dict["Destination"]))
             Flights.append(flight)
             print(flight)
 
@@ -70,8 +74,46 @@ for line in lines[4:]:
             r_dict = LP.process_Rest(line)
             rest = CO.Rest(
                 location = r_dict["Location1"],
-                start_time = r_dict["Start"], 
-                end_time = r_dict["End"])
+                start_time = DT.lcl_string_to_utc_datetime(r_dict["Start"], r_dict["Location1"]),
+                end_time = DT.lcl_string_to_utc_datetime(r_dict["End"], r_dict["Location1"]))
             Rests.append(rest)
             print(rest)
 
+#assign parent-child relationships:
+
+print("\n", "\n")
+
+for flight in Flights[:]:
+    for dutyperiod in DutyPeriods:
+        if flight.departure_time >= dutyperiod.start_time and flight.arrival_time <= dutyperiod.end_time:
+            dutyperiod.add_flight(flight)
+            Flights.remove(flight)
+            break #exit duty period loop, go to next flight
+
+for deadhead in Deadheads[:]:
+    for dutyperiod in DutyPeriods:
+        if deadhead.departure_time >= dutyperiod.start_time and deadhead.arrival_time <= dutyperiod.end_time:
+            dutyperiod.add_deadhead(deadhead)
+            Deadheads.remove(deadhead)
+            break
+
+for rest in Rests[:]:
+    for dutyperiod in DutyPeriods:
+        if deadhead.departure_time >= dutyperiod.start_time and deadhead.arrival_time <= dutyperiod.end_time:
+            dutyperiod.add_rest(rest)
+            Rests.remove(rest)
+            break
+
+for pairing in Pairings:
+    for dutyperiod in DutyPeriods[:]:
+        if dutyperiod.start_time >= pairing.start_time and dutyperiod.end_time <= pairing.end_time:
+            pairing.add_dutyperiod(dutyperiod)
+            DutyPeriods.remove(dutyperiod)
+
+
+
+for p in Pairings:
+    print(p)
+
+
+print(Rests, Flights, DutyPeriods, Deadheads)

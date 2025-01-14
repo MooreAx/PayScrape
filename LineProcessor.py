@@ -20,7 +20,7 @@ def line_type(line):
 def process_Header(line):
 	#line 0
 	#example: PAIRING ID: 76854 FOR: 5788 - MOORE, A GENERATED: 11-Jan-25 23:39 UTC
-	pattern = r"PAIRING ID: (\d*) FOR: (\d*) - (.*, .) GENERATED: (\d{1,2}-...-\d\d \d{1,2}:\d\d UTC)"
+	pattern = r"PAIRING ID: (\d*) FOR: (\d*) - (.*, .) GENERATED: (\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC"
 	
 	match = re.search(pattern, line)
 
@@ -40,7 +40,7 @@ def process_Header(line):
 def process_Pairing(line):
 	#line 1
 	#example: CHECK-IN/START: 18-Dec-24 15:00 LCL FINISHED: 21-Dec-24 19:34 LCL
-	pattern = r"CHECK-IN\/START: (\d{1,2}-...-\d\d \d{1,2}:\d\d LCL) FINISHED: (\d{1,2}-...-\d\d \d{1,2}:\d\d LCL)"
+	pattern = r"CHECK-IN\/START: (\d{1,2}-...-\d\d \d{1,2}:\d\d) LCL FINISHED: (\d{1,2}-...-\d\d \d{1,2}:\d\d) LCL"
 
 	match = re.search(pattern, line)
 
@@ -58,7 +58,7 @@ def process_Pairing(line):
 def process_DutyPeriod(line):
 
 	#example: DUTY END 9.9 / 9:52 HRS [19-Dec-24 16:30 UTC - 20-Dec-24 02:22 UTC] DUTY FLT HRS: 5.4
-	pattern = r"DUTY END (\d{1,2}.\d) \/ (\d{1,2}:\d{2}) HRS \[(\d{1,2}-...-\d\d \d{1,2}:\d\d UTC) - (\d{1,2}-...-\d\d \d{1,2}:\d\d UTC)] DUTY FLT HRS: (\d{1,2}.?\d?)"
+	pattern = r"DUTY END (\d{1,2}.\d) \/ (\d{1,2}:\d{2}) HRS \[(\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC - (\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC] DUTY FLT HRS: (\d{1,2}.?\d?)"
 
 	match = re.search(pattern, line)
 
