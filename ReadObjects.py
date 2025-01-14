@@ -5,7 +5,6 @@ Reads scraped data into class instances
 import LineProcessor as LP
 import ClassObjects as CO
 
-
 PID = "76854"
 
 #read data from file
