@@ -58,7 +58,7 @@ def process_Pairing(line):
 def process_DutyPeriod(line):
 
 	#example: DUTY END 9.9 / 9:52 HRS [19-Dec-24 16:30 UTC - 20-Dec-24 02:22 UTC] DUTY FLT HRS: 5.4
-	pattern = r"DUTY END (\d{1,2}.\d) \/ (\d{1,2}:\d{2}) HRS \[(\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC - (\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC] DUTY FLT HRS: (\d{1,2}.?\d?)"
+	pattern = r"DUTY END (\d{1,2}.?\d?) \/ (\d{1,2}:\d{2}) HRS \[(\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC - (\d{1,2}-...-\d\d \d{1,2}:\d\d) UTC] DUTY FLT HRS: (\d{1,2}.?\d?)"
 
 	match = re.search(pattern, line)
 
@@ -90,7 +90,7 @@ def process_Flight(line):
 			InTime = match.group(5),
 			Registration = match.group(6),
 			Type = match.group(7),
-			Distance = match.group(8)
+			Distance = match.group(9)
 			)
 	else:
 		result = dict()

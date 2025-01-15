@@ -19,7 +19,8 @@ tf = TimezoneFinder()
 #Look up the time zone using timezone finder.
 #apply method with axis=1 is equivalent to "rowwise() in r"
 #Lamda is an anonymous function with the argument "row", i.e. a row of data
-aerodromes["TimeZone"] = aerodromes.apply(lambda row: tf.timezone_at(lat=row["y"], lng=row["x"]), axis=1)
+#aerodromes["TimeZone"] = aerodromes.apply(lambda row: tf.timezone_at(lat=row["y"], lng=row["x"]), axis=1)
+''' timezonefinder is not well calibrated for Nunavut '''
 
 #convert df to nested dictionary
 airport_info_dict = pd.Series(aerodromes.apply(
